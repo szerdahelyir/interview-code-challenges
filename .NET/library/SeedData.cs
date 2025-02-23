@@ -56,6 +56,13 @@ namespace OneBeyondApi
                 EmailAddress = "liana@gmail.com"
             };
 
+            var lianaJamesFine = new Fine
+            {
+                Amount = 50,
+                Borrower = lianaJames,
+                FineDate = DateTime.Now,
+            };
+
             var bookOnLoanUntilToday = new BookStock {
                 Book = clayBook,
                 OnLoanTo = daveSmith,
@@ -101,6 +108,8 @@ namespace OneBeyondApi
                 context.Catalogue.Add(bookNotOnLoan);
                 context.Catalogue.Add(bookOnLoanUntilNextWeek);
                 context.Catalogue.Add(rustBookStock);
+
+                context.Fines.Add(lianaJamesFine);
 
                 context.SaveChanges();
 
