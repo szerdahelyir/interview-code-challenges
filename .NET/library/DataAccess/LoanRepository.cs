@@ -1,4 +1,5 @@
-﻿using OneBeyondApi.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using OneBeyondApi.Model;
 
 namespace OneBeyondApi.DataAccess
 {
@@ -13,6 +14,7 @@ namespace OneBeyondApi.DataAccess
             using (var context = new LibraryContext())
             {
                 var activeLoans = context.Catalogue
+                    .AsNoTracking()
                     .Where(bs => bs.OnLoanTo != null)
                     .GroupBy(bs => bs.OnLoanTo) 
                     .Select(group => new LoanDetail
@@ -29,6 +31,29 @@ namespace OneBeyondApi.DataAccess
                     .ToList();
 
                 return activeLoans;
+            }
+        }
+
+        public BookStock ReturnBook(Guid bookStockId)
+        {
+            using (var context = new LibraryContext())
+            {
+                var bookStock = context.Catalogue
+                    .Include(x => x.Book)
+                    .ThenInclude(x => x.Author)
+                    .Include(x => x.OnLoanTo).FirstOrDefault(bs => bs.Id == bookStockId);
+
+                if (bookStock == null || bookStock.OnLoanTo == null)
+                {
+                    return null;
+                }
+
+                // Clear the loan details
+                bookStock.OnLoanTo = null;
+                bookStock.LoanEndDate = null;
+
+                context.SaveChanges();
+                return bookStock;
             }
         }
     }
