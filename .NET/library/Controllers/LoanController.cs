@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OneBeyondApi.DataAccess;
 using OneBeyondApi.Model;
+using OneBeyondApi.Services;
 using System.Collections;
 
 namespace OneBeyondApi.Controllers
@@ -11,11 +12,13 @@ namespace OneBeyondApi.Controllers
     {
         private readonly ILogger<LoanController> _logger;
         private readonly ILoanRepository _loanRepository;
+        private readonly ILoanService _loanService;
 
-        public LoanController(ILogger<LoanController> logger, ILoanRepository loanRepository)
+        public LoanController(ILogger<LoanController> logger, ILoanRepository loanRepository, ILoanService loanService)
         {
             _logger = logger;
             _loanRepository = loanRepository;   
+            _loanService = loanService;
         }
 
         [HttpGet]
@@ -29,27 +32,13 @@ namespace OneBeyondApi.Controllers
         [HttpPut("return/{bookStockId}")]
         public IActionResult ReturnBook(Guid bookStockId)
         {
-            var bookStock = _loanRepository.ReturnBook(bookStockId);
-
+            var bookStock = _loanService.ReturnBook(bookStockId);
             if (bookStock == null)
             {
-                return NotFound("Book stock not found or not on loan.");
+                return NotFound("Book not found or not on loan.");
             }
 
             return Ok($"Book '{bookStock.Book.Name}' has been returned successfully.");
-        }
-
-        [HttpGet("fines/{borrowerId}")]
-        public IActionResult GetFines(Guid borrowerId)
-        {
-            var fines = _loanRepository.GetFinesByBorrower(borrowerId);
-
-            if (fines.Count == 0)
-            {
-                return Ok("No fines found for this borrower.");
-            }
-
-            return Ok(fines);
         }
     }
 }

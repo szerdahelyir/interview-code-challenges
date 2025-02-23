@@ -44,5 +44,19 @@ namespace OneBeyondApi.DataAccess
                 return list.ToList();
             }
         }
+
+        public BookStock GetBookStockById(Guid bookStockId)
+        {
+            using (var context = new LibraryContext())
+            {
+                var bookStock = context.Catalogue
+                    .Include(x => x.Book)
+                    .ThenInclude(x => x.Author)
+                    .Include(x => x.OnLoanTo)
+                    .FirstOrDefault(bs => bs.Id == bookStockId);
+
+                return bookStock;
+            }
+        }
     }
 }

@@ -34,35 +34,21 @@ namespace OneBeyondApi.DataAccess
             }
         }
 
-        public BookStock ReturnBook(Guid bookStockId)
+        public void ReturnBook(BookStock bookStock)
         {
             using (var context = new LibraryContext())
             {
-                var bookStock = context.Catalogue
-                    .Include(x => x.Book)
-                    .ThenInclude(x => x.Author)
-                    .Include(x => x.OnLoanTo).FirstOrDefault(bs => bs.Id == bookStockId);
-
-                if (bookStock == null || bookStock.OnLoanTo == null)
-                {
-                    return null;
-                }
+                var borrower = bookStock.OnLoanTo;
 
                 // Clear the loan details
                 bookStock.OnLoanTo = null;
                 bookStock.LoanEndDate = null;
 
                 context.SaveChanges();
-                return bookStock;
             }
+                
         }
 
-        public List<Fine> GetFinesByBorrower(Guid borrowerId)
-        {
-            using (var context = new LibraryContext())
-            {
-                return context.Fines.Include(f=>f.Borrower).Where(f => f.Borrower.Id == borrowerId).ToList();
-            }
-        }
+
     }
 }
