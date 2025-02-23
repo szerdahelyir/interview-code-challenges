@@ -38,5 +38,18 @@ namespace OneBeyondApi.Controllers
 
             return Ok($"Book '{bookStock.Book.Name}' has been returned successfully.");
         }
+
+        [HttpGet("fines/{borrowerId}")]
+        public IActionResult GetFines(Guid borrowerId)
+        {
+            var fines = _loanRepository.GetFinesByBorrower(borrowerId);
+
+            if (fines.Count == 0)
+            {
+                return Ok("No fines found for this borrower.");
+            }
+
+            return Ok(fines);
+        }
     }
 }

@@ -56,5 +56,13 @@ namespace OneBeyondApi.DataAccess
                 return bookStock;
             }
         }
+
+        public List<Fine> GetFinesByBorrower(Guid borrowerId)
+        {
+            using (var context = new LibraryContext())
+            {
+                return context.Fines.Include(f=>f.Borrower).Where(f => f.Borrower.Id == borrowerId).ToList();
+            }
+        }
     }
 }

@@ -6,5 +6,6 @@ namespace OneBeyondApi.DataAccess
     {
         public List<LoanDetail> GetActiveLoans();
         public BookStock ReturnBook(Guid bookStockId);
+        public List<Fine> GetFinesByBorrower(Guid borrowerId);
     }
 }
