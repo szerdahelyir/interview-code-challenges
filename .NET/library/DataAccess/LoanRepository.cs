@@ -9,6 +9,7 @@ namespace OneBeyondApi.DataAccess
         {
         }
 
+        //Add an "On Loan" end point with functionality to get/query the details of all borrowers with active loans and the titles of books they have on loan.
         public List<LoanDetail> GetActiveLoans()
         {
             using (var context = new LibraryContext())
@@ -33,22 +34,6 @@ namespace OneBeyondApi.DataAccess
                 return activeLoans;
             }
         }
-
-        public void ReturnBook(BookStock bookStock)
-        {
-            using (var context = new LibraryContext())
-            {
-                var borrower = bookStock.OnLoanTo;
-
-                // Clear the loan details
-                bookStock.OnLoanTo = null;
-                bookStock.LoanEndDate = null;
-
-                context.SaveChanges();
-            }
-                
-        }
-
 
     }
 }
