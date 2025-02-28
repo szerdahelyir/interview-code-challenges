@@ -11,6 +11,8 @@ builder.Services.AddScoped<IBorrowerRepository, BorrowerRepository>();
 builder.Services.AddScoped<ICatalogueRepository, CatalogueRepository>();
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 builder.Services.AddScoped<IFineRepository, FineRepository>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+
 builder.Services.AddScoped<ILoanService, LoanService>();
 
 // Seed test data into memory DB
