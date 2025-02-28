@@ -26,5 +26,14 @@ namespace OneBeyondApi.DataAccess
                 return book.Id;
             }
         }
+
+        public Book GetBookById(Guid bookId)
+        {
+            using (var context = new LibraryContext())
+            {
+                var book = context.Books.Where(b => b.Id == bookId).FirstOrDefault();
+                return book;
+            }
+        }
     }
 }
